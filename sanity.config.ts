@@ -6,6 +6,8 @@ import { apiVersion, dataset, projectId } from "./src/sanity/env";
 import { schema } from "./src/sanity/schemaTypes";
 import { structure } from "./src/sanity/structure";
 
+const SINGLETON_TYPES = new Set(["historiaDoBloco", "configuracoesGerais"]);
+
 export default defineConfig({
   basePath: "/studio",
   name: "cueca-do-avesso",
@@ -17,4 +19,18 @@ export default defineConfig({
     structureTool({ structure }),
     visionTool({ defaultApiVersion: apiVersion }),
   ],
+  document: {
+    newDocumentOptions: (prev, { creationContext }) => {
+      if (creationContext.type === "global") {
+        return prev.filter((item) => !SINGLETON_TYPES.has(item.templateId));
+      }
+      return prev;
+    },
+    actions: (prev, { schemaType }) =>
+      SINGLETON_TYPES.has(schemaType)
+        ? prev.filter(
+            (action) => !["duplicate", "delete"].includes(action.action ?? ""),
+          )
+        : prev,
+  },
 });
