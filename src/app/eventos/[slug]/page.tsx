@@ -5,9 +5,10 @@ import { notFound } from "next/navigation";
 
 import { FotoThumb } from "@/components/FotoThumb";
 import { PortableTextRenderer } from "@/components/PortableTextRenderer";
+import { VideoGaleria } from "@/components/VideoGaleria";
 import { formatarDataEvento } from "@/lib/datas";
 import { urlFor } from "@/sanity/image";
-import { getEventoBySlug, getFotos } from "@/sanity/queries";
+import { getEventoBySlug, getFotos, getVideos } from "@/sanity/queries";
 
 export const revalidate = 60;
 
@@ -25,7 +26,7 @@ export default async function EventoPage({ params }: PageProps<"/eventos/[slug]"
   const evento = await getEventoBySlug(slug);
   if (!evento) notFound();
 
-  const fotos = await getFotos(slug);
+  const [fotos, videos] = await Promise.all([getFotos(slug), getVideos(slug)]);
   const imagemUrl = evento.imagemCapa
     ? urlFor(evento.imagemCapa).width(1600).height(900).fit("crop").url()
     : null;
@@ -61,14 +62,14 @@ export default async function EventoPage({ params }: PageProps<"/eventos/[slug]"
         )}
 
         {evento.descricao && (
-          <div className="mt-6">
+          <div className="mt-6 max-w-prose">
             <PortableTextRenderer value={evento.descricao} />
           </div>
         )}
       </div>
 
       {fotos.length > 0 && (
-        <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+        <section className="mx-auto max-w-6xl px-4 pb-12 sm:px-6">
           <h2 className="mb-4 font-display text-xl font-semibold text-ink">
             Fotos deste evento
           </h2>
@@ -77,6 +78,15 @@ export default async function EventoPage({ params }: PageProps<"/eventos/[slug]"
               <FotoThumb key={foto._id} foto={foto} />
             ))}
           </div>
+        </section>
+      )}
+
+      {videos.length > 0 && (
+        <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+          <h2 className="mb-4 font-display text-xl font-semibold text-ink">
+            Vídeos deste evento
+          </h2>
+          <VideoGaleria videos={videos} />
         </section>
       )}
     </article>

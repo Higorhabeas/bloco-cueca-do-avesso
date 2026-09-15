@@ -66,7 +66,7 @@ export default async function HomePage() {
               Próximos eventos
             </h2>
             <Link href="/eventos" className="text-sm font-semibold text-brand">
-              Ver todos →
+              Ver todos <span className="sr-only">os eventos</span>→
             </Link>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -84,7 +84,7 @@ export default async function HomePage() {
               Últimos recados
             </h2>
             <Link href="/recados" className="text-sm font-semibold text-brand">
-              Ver todos →
+              Ver todos <span className="sr-only">os recados</span>→
             </Link>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -120,7 +120,7 @@ export default async function HomePage() {
               Ala da Bateria
             </h2>
             <Link href="/bateria" className="text-sm font-semibold text-brand">
-              Ver todos →
+              Ver todos <span className="sr-only">os membros da bateria</span>→
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-6">

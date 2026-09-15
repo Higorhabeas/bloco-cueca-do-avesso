@@ -42,8 +42,16 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-paper text-body-text">
+        <a
+          href="#conteudo-principal"
+          className="sr-only-focusable fixed left-4 top-4 z-50 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-paper"
+        >
+          Pular para o conteúdo
+        </a>
         <Header config={config} />
-        <main className="flex-1">{children}</main>
+        <main id="conteudo-principal" tabIndex={-1} className="flex-1 focus:outline-none">
+          {children}
+        </main>
         <Footer config={config} />
         <WhatsAppFloatingButton config={config} />
       </body>

@@ -35,7 +35,7 @@ export default async function SobrePage() {
       </h1>
 
       {historia.texto && (
-        <div className="mt-6">
+        <div className="mt-6 max-w-prose">
           <PortableTextRenderer value={historia.texto} />
         </div>
       )}

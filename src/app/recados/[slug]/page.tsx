@@ -53,7 +53,7 @@ export default async function RecadoPage({ params }: PageProps<"/recados/[slug]"
         </div>
       )}
 
-      <div className="mt-6">
+      <div className="mt-6 max-w-prose">
         <PortableTextRenderer value={recado.texto} />
       </div>
 

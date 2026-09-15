@@ -84,9 +84,12 @@ export async function getFotos(eventoSlug?: string): Promise<Foto[]> {
   );
 }
 
-export async function getVideos(): Promise<Video[]> {
+export async function getVideos(eventoSlug?: string): Promise<Video[]> {
+  const filter = eventoSlug
+    ? `_type == "video" && evento->slug.current == $eventoSlug`
+    : `_type == "video"`;
   return client.fetch(
-    `*[_type == "video"] | order(_createdAt desc) {
+    `*[${filter}] | order(_createdAt desc) {
       _id,
       titulo,
       url,
@@ -94,6 +97,7 @@ export async function getVideos(): Promise<Video[]> {
       legenda,
       "evento": evento->{titulo, "slug": slug.current}
     }`,
+    eventoSlug ? { eventoSlug } : {},
   );
 }
 
