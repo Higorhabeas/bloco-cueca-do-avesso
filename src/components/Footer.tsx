@@ -54,8 +54,17 @@ export function Footer({ config }: { config: ConfiguracoesGerais | null }) {
         </div>
       </div>
 
-      <div className="border-t border-white/10 px-4 py-4 text-center text-xs text-paper/60 sm:px-6">
-        © {ano} Cueca do Avesso. Feito com carinho pra rua.
+      <div className="flex flex-col items-center gap-2 border-t border-white/10 px-4 py-4 text-center text-xs text-paper/60 sm:flex-row sm:justify-between sm:px-6 sm:text-left">
+        <p>© {ano} Cueca do Avesso. Feito com carinho pra rua.</p>
+        <a
+          href="/studio"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition hover:text-accent"
+        >
+          Área do organizador
+          <span className="sr-only"> (abre em uma nova aba)</span>
+        </a>
       </div>
     </footer>
   );

@@ -2,6 +2,7 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 
+import { revisarPortuguesAction } from "./src/sanity/acoes/revisarPortugues";
 import { apiVersion, dataset, projectId } from "./src/sanity/env";
 import { schema } from "./src/sanity/schemaTypes";
 import { structure } from "./src/sanity/structure";
@@ -26,11 +27,13 @@ export default defineConfig({
       }
       return prev;
     },
-    actions: (prev, { schemaType }) =>
-      SINGLETON_TYPES.has(schemaType)
+    actions: (prev, { schemaType }) => {
+      const acoes = SINGLETON_TYPES.has(schemaType)
         ? prev.filter(
             (action) => !["duplicate", "delete"].includes(action.action ?? ""),
           )
-        : prev,
+        : prev;
+      return [...acoes, revisarPortuguesAction];
+    },
   },
 });
