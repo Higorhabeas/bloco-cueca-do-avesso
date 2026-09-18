@@ -1,5 +1,8 @@
 import { defineField, defineType } from "sanity";
 
+import { CampoSenhaEnvio } from "../componentes/CampoSenhaEnvio";
+import { StatusEnvioEmail } from "../componentes/StatusEnvioEmail";
+
 export default defineType({
   name: "configuracoesGerais",
   title: "Configurações Gerais",
@@ -36,9 +39,34 @@ export default defineType({
       rows: 3,
     }),
     defineField({
+      name: "statusEnvioEmail",
+      title: "Situação do envio de e-mail",
+      type: "string",
+      readOnly: true,
+      components: { input: StatusEnvioEmail },
+    }),
+    defineField({
+      name: "emailEnvio",
+      title: "E-mail do bloco (remetente)",
+      description:
+        "Conta do Gmail que dispara os códigos de acesso e os avisos. É esse endereço que aparece como remetente.",
+      type: "string",
+      validation: (rule) =>
+        rule.email().error("Digite um endereço de e-mail válido."),
+    }),
+    defineField({
+      name: "senhaEnvio",
+      title: "Senha de app do e-mail do bloco",
+      description:
+        "Fica embaralhada no banco de dados, nunca em texto puro. Só o servidor consegue desembaralhar na hora de enviar.",
+      type: "string",
+      components: { input: CampoSenhaEnvio },
+    }),
+    defineField({
       name: "emailsAdministradores",
       title: "E-mails dos administradores",
-      description: "Recebem aviso por e-mail sempre que algo for publicado, editado ou excluído, e quando o armazenamento estiver ficando cheio.",
+      description:
+        "Recebem aviso por e-mail sempre que algo for publicado, editado ou excluído, e quando o armazenamento estiver ficando cheio. Atenção: este campo é público, qualquer pessoa consegue lê-lo — não use e-mails que você não queira expor.",
       type: "array",
       of: [{ type: "string" }],
     }),
