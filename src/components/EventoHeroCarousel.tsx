@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import {
   useCallback,
@@ -11,8 +10,9 @@ import {
 } from "react";
 
 import { formatarDataEvento } from "@/lib/datas";
-import { urlFor } from "@/sanity/image";
 import type { EventoSummary } from "@/sanity/types";
+
+import { ImagemEnquadrada } from "./ImagemEnquadrada";
 
 const INTERVALO_AUTOPLAY_MS = 3000;
 
@@ -25,15 +25,17 @@ export function EventoHeroCarousel({ eventos }: { eventos: EventoSummary[] }) {
   const irPara = useCallback((indice: number, total: number) => {
     const track = trackRef.current;
     if (!track) return;
+
     const indiceCircular = (indice + total) % total;
-    const slide = track.children[indiceCircular] as HTMLElement | undefined;
     const prefereMenosMovimento = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    slide?.scrollIntoView({
+
+    // scrollTo na própria faixa: scrollIntoView rolaria a página junto e a
+    // jogaria de volta ao topo a cada troca automática.
+    track.scrollTo({
+      left: indiceCircular * track.clientWidth,
       behavior: prefereMenosMovimento ? "auto" : "smooth",
-      inline: "start",
-      block: "nearest",
     });
   }, []);
 
@@ -98,23 +100,18 @@ export function EventoHeroCarousel({ eventos }: { eventos: EventoSummary[] }) {
         className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {eventos.map((evento) => {
-          const imagemUrl = evento.imagemCapa
-            ? urlFor(evento.imagemCapa).width(1600).height(900).fit("crop").url()
-            : null;
-
           return (
             <div
               key={evento._id}
-              className="relative aspect-video w-full shrink-0 snap-start sm:aspect-21/9"
+              className="relative aspect-video w-full shrink-0 snap-start overflow-hidden bg-ink sm:aspect-21/9"
             >
-              {imagemUrl ? (
-                <Image
-                  src={imagemUrl}
-                  alt={evento.imagemCapa?.alt ?? evento.titulo}
-                  fill
-                  priority
+              {evento.imagemCapa?.asset ? (
+                <ImagemEnquadrada
+                  imagem={evento.imagemCapa}
+                  alt={evento.imagemCapa.alt ?? evento.titulo}
                   sizes="100vw"
-                  className="object-cover"
+                  largura={1600}
+                  prioridade
                 />
               ) : (
                 <div className="h-full w-full bg-linear-to-br from-brand to-brand-dark" />

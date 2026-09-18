@@ -1,28 +1,24 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { formatarDataEvento } from "@/lib/datas";
-import { urlFor } from "@/sanity/image";
 import type { EventoSummary } from "@/sanity/types";
 
-export function EventoCard({ evento }: { evento: EventoSummary }) {
-  const imagemUrl = evento.imagemCapa
-    ? urlFor(evento.imagemCapa).width(640).height(480).fit("crop").url()
-    : null;
+import { ImagemEnquadrada } from "./ImagemEnquadrada";
 
+export function EventoCard({ evento }: { evento: EventoSummary }) {
   return (
     <Link
       href={`/eventos/${evento.slug}`}
       className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5 transition hover:shadow-md"
     >
       <div className="relative aspect-4/3 w-full overflow-hidden bg-paper-muted">
-        {imagemUrl ? (
-          <Image
-            src={imagemUrl}
-            alt={evento.imagemCapa?.alt ?? evento.titulo}
-            fill
+        {evento.imagemCapa?.asset ? (
+          <ImagemEnquadrada
+            imagem={evento.imagemCapa}
+            alt={evento.imagemCapa.alt ?? evento.titulo}
             sizes="(min-width: 768px) 33vw, 100vw"
-            className="object-cover transition duration-300 group-hover:scale-105"
+            largura={800}
+            classeDaImagem="transition duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full items-center justify-center font-display text-lg text-brand/40">

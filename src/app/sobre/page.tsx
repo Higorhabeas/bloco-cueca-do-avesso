@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 
+import { ImagemEnquadrada } from "@/components/ImagemEnquadrada";
 import { PortableTextRenderer } from "@/components/PortableTextRenderer";
-import { urlFor } from "@/sanity/image";
 import { getHistoriaDoBloco } from "@/sanity/queries";
 
 export const revalidate = 60;
@@ -47,16 +46,14 @@ export default async function SobrePage() {
           </h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {historia.fotosAntigas.map((foto, indice) => {
-              const url = urlFor(foto).width(500).height(500).fit("crop").url();
               return (
                 <figure key={indice} className="overflow-hidden rounded-xl">
-                  <div className="relative aspect-square bg-paper-muted">
-                    <Image
-                      src={url}
+                  <div className="relative aspect-square overflow-hidden rounded-xl bg-paper-muted">
+                    <ImagemEnquadrada
+                      imagem={foto}
                       alt={foto.alt ?? historia.titulo}
-                      fill
                       sizes="(min-width: 640px) 33vw, 50vw"
-                      className="object-cover"
+                      largura={700}
                     />
                   </div>
                   {foto.ano && (

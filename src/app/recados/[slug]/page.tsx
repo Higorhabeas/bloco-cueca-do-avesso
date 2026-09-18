@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ImagemEnquadrada } from "@/components/ImagemEnquadrada";
 import { PortableTextRenderer } from "@/components/PortableTextRenderer";
 import { formatarDataEvento } from "@/lib/datas";
-import { urlFor } from "@/sanity/image";
 import { getRecadoBySlug } from "@/sanity/queries";
 
 export const revalidate = 60;
@@ -24,10 +23,6 @@ export default async function RecadoPage({ params }: PageProps<"/recados/[slug]"
   const recado = await getRecadoBySlug(slug);
   if (!recado) notFound();
 
-  const imagemUrl = recado.imagem
-    ? urlFor(recado.imagem).width(1200).height(675).fit("crop").url()
-    : null;
-
   return (
     <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <Link href="/recados" className="text-sm font-semibold text-brand">
@@ -41,14 +36,14 @@ export default async function RecadoPage({ params }: PageProps<"/recados/[slug]"
         {recado.titulo}
       </h1>
 
-      {imagemUrl && (
-        <div className="relative mt-6 aspect-video w-full overflow-hidden rounded-2xl bg-paper-muted">
-          <Image
-            src={imagemUrl}
-            alt={recado.imagem?.alt ?? recado.titulo}
-            fill
+      {recado.imagem?.asset && (
+        <div className="relative mt-6 aspect-video w-full overflow-hidden rounded-2xl bg-ink">
+          <ImagemEnquadrada
+            imagem={recado.imagem}
+            alt={recado.imagem.alt ?? recado.titulo}
             sizes="768px"
-            className="object-cover"
+            largura={1200}
+            prioridade
           />
         </div>
       )}

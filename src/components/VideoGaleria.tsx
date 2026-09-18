@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-import { urlFor } from "@/sanity/image";
 import type { Video } from "@/sanity/types";
+
+import { ImagemEnquadrada } from "./ImagemEnquadrada";
 
 function extrairIdYoutube(url: string): string | null {
   const match = url.match(
@@ -106,9 +106,6 @@ export function VideoGaleria({ videos }: { videos: Video[] }) {
     <>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {videos.map((video) => {
-          const capaUrl = video.capa
-            ? urlFor(video.capa).width(640).height(360).fit("crop").url()
-            : null;
           return (
             <button
               key={video._id}
@@ -117,14 +114,14 @@ export function VideoGaleria({ videos }: { videos: Video[] }) {
               aria-haspopup="dialog"
               className="group overflow-hidden rounded-2xl bg-white text-left shadow-sm ring-1 ring-black/5 transition hover:shadow-md"
             >
-              <div className="relative aspect-video bg-ink">
-                {capaUrl ? (
-                  <Image
-                    src={capaUrl}
-                    alt={video.capa?.alt ?? video.titulo}
-                    fill
+              <div className="relative aspect-video overflow-hidden bg-ink">
+                {video.capa?.asset ? (
+                  <ImagemEnquadrada
+                    imagem={video.capa}
+                    alt={video.capa.alt ?? video.titulo}
                     sizes="(min-width: 1024px) 33vw, 100vw"
-                    className="object-cover opacity-90 transition group-hover:opacity-100"
+                    largura={800}
+                    classeDaImagem="opacity-90 transition group-hover:opacity-100"
                   />
                 ) : null}
                 <span className="absolute inset-0 flex items-center justify-center">

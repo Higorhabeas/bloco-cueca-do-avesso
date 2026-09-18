@@ -1,28 +1,24 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { formatarDataCurta } from "@/lib/datas";
-import { urlFor } from "@/sanity/image";
 import type { RecadoSummary } from "@/sanity/types";
 
-export function RecadoCard({ recado }: { recado: RecadoSummary }) {
-  const imagemUrl = recado.imagem
-    ? urlFor(recado.imagem).width(480).height(320).fit("crop").url()
-    : null;
+import { ImagemEnquadrada } from "./ImagemEnquadrada";
 
+export function RecadoCard({ recado }: { recado: RecadoSummary }) {
   return (
     <Link
       href={`/recados/${recado.slug}`}
       className="group flex gap-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-black/5 transition hover:shadow-md sm:flex-col sm:p-0 sm:pb-4"
     >
-      {imagemUrl && (
-        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl sm:h-40 sm:w-full sm:rounded-b-none sm:rounded-t-2xl">
-          <Image
-            src={imagemUrl}
-            alt={recado.imagem?.alt ?? recado.titulo}
-            fill
+      {recado.imagem?.asset && (
+        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-paper-muted sm:h-40 sm:w-full sm:rounded-b-none sm:rounded-t-2xl">
+          <ImagemEnquadrada
+            imagem={recado.imagem}
+            alt={recado.imagem.alt ?? recado.titulo}
             sizes="(min-width: 640px) 33vw, 80px"
-            className="object-cover transition duration-300 group-hover:scale-105"
+            largura={640}
+            classeDaImagem="transition duration-300 group-hover:scale-105"
           />
         </div>
       )}

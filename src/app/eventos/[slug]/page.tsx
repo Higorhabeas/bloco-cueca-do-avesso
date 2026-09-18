@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { FotoThumb } from "@/components/FotoThumb";
+import { ImagemEnquadrada } from "@/components/ImagemEnquadrada";
 import { PortableTextRenderer } from "@/components/PortableTextRenderer";
 import { VideoGaleria } from "@/components/VideoGaleria";
 import { formatarDataEvento } from "@/lib/datas";
-import { urlFor } from "@/sanity/image";
 import { getEventoBySlug, getFotos, getVideos } from "@/sanity/queries";
 
 export const revalidate = 60;
@@ -27,21 +26,17 @@ export default async function EventoPage({ params }: PageProps<"/eventos/[slug]"
   if (!evento) notFound();
 
   const [fotos, videos] = await Promise.all([getFotos(slug), getVideos(slug)]);
-  const imagemUrl = evento.imagemCapa
-    ? urlFor(evento.imagemCapa).width(1600).height(900).fit("crop").url()
-    : null;
 
   return (
     <article>
-      <div className="relative aspect-video w-full bg-paper-muted sm:aspect-21/9">
-        {imagemUrl && (
-          <Image
-            src={imagemUrl}
-            alt={evento.imagemCapa?.alt ?? evento.titulo}
-            fill
-            priority
+      <div className="relative aspect-video w-full overflow-hidden bg-ink sm:aspect-21/9">
+        {evento.imagemCapa?.asset && (
+          <ImagemEnquadrada
+            imagem={evento.imagemCapa}
+            alt={evento.imagemCapa.alt ?? evento.titulo}
             sizes="100vw"
-            className="object-cover"
+            largura={1600}
+            prioridade
           />
         )}
       </div>
