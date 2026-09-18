@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!podeAcessarPainel(email)) {
+  if (!(await podeAcessarPainel(email))) {
     return NextResponse.json(RESPOSTA_NEUTRA);
   }
 
@@ -56,10 +56,17 @@ export async function POST(request: Request) {
     ficouSoNoTerminal = await enviarCodigoPorEmail(email, codigo);
   } catch (erro) {
     console.error("[painel] falha ao preparar o código de acesso", erro);
+
+    const credencialRecusada =
+      typeof erro === "object" && erro !== null && "code" in erro
+        ? (erro as { code?: string }).code === "EAUTH"
+        : false;
+
     return NextResponse.json(
       {
-        mensagem:
-          "O envio de e-mail ainda não está configurado no servidor. Avise quem cuida do site.",
+        mensagem: credencialRecusada
+          ? "O Gmail recusou a senha de app cadastrada. Confira o remetente e a senha em Configurações Gerais, no Studio."
+          : "O envio de e-mail ainda não está configurado no servidor. Avise quem cuida do site.",
       },
       { status: 500 },
     );

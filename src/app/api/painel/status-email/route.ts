@@ -13,7 +13,7 @@ export const runtime = "nodejs";
  */
 export async function GET(request: NextRequest) {
   const sessao = lerToken<Sessao>(request.cookies.get(COOKIE_SESSAO)?.value);
-  if (!sessao || !("email" in sessao) || !podeAcessarPainel(sessao.email)) {
+  if (!sessao || !("email" in sessao) || !(await podeAcessarPainel(sessao.email))) {
     return NextResponse.json({ mensagem: "Sessão expirada." }, { status: 401 });
   }
 

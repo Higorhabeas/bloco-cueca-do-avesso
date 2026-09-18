@@ -66,7 +66,7 @@ export default defineType({
       name: "emailsAdministradores",
       title: "E-mails dos administradores",
       description:
-        "Recebem aviso por e-mail sempre que algo for publicado, editado ou excluído, e quando o armazenamento estiver ficando cheio. Atenção: este campo é público, qualquer pessoa consegue lê-lo — não use e-mails que você não queira expor.",
+        "Quem está nesta lista pode entrar no painel (recebe o código de acesso) e é avisado quando algo é publicado, editado ou excluído. Tirar alguém daqui corta o acesso em até 1 minuto. Atenção: esta lista é pública, qualquer pessoa consegue lê-la — não inclua e-mails que você não queira expor. Lembre que a pessoa também precisa de convite no manage.sanity.io para conseguir editar o conteúdo.",
       type: "array",
       of: [{ type: "string" }],
     }),

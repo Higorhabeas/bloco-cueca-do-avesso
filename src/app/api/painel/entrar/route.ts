@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
   }
 
   // A permissão é reconferida aqui: se o e-mail saiu da lista depois do envio, o código não vale mais.
-  if (!podeAcessarPainel(desafio.email)) {
+  if (!(await podeAcessarPainel(desafio.email))) {
     return NextResponse.json(PEDIR_NOVO_CODIGO, { status: 403 });
   }
 

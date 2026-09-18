@@ -3,11 +3,11 @@ import { NextResponse, type NextRequest } from "next/server";
 import { podeAcessarPainel } from "@/lib/painel/acesso";
 import { COOKIE_SESSAO, type Sessao, lerToken } from "@/lib/painel/sessao";
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const sessao = lerToken<Sessao>(request.cookies.get(COOKIE_SESSAO)?.value);
 
-  // Reconfere a lista a cada acesso: tirar alguém da lista derruba a sessão dela na hora.
-  if (sessao && "email" in sessao && podeAcessarPainel(sessao.email)) {
+  // Reconfere a lista a cada acesso: tirar alguém do Studio derruba a sessão dela.
+  if (sessao && "email" in sessao && (await podeAcessarPainel(sessao.email))) {
     return NextResponse.next();
   }
 

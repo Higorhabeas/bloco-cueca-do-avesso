@@ -33,7 +33,7 @@ export interface ProblemaEncontrado {
 
 export async function POST(request: NextRequest) {
   const sessao = lerToken<Sessao>(request.cookies.get(COOKIE_SESSAO)?.value);
-  if (!sessao || !("email" in sessao) || !podeAcessarPainel(sessao.email)) {
+  if (!sessao || !("email" in sessao) || !(await podeAcessarPainel(sessao.email))) {
     return NextResponse.json(
       { mensagem: "Sua sessão do painel expirou. Entre de novo para revisar." },
       { status: 401 },
