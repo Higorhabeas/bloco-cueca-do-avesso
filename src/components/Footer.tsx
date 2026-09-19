@@ -16,12 +16,12 @@ export function Footer({ config }: { config: ConfiguracoesGerais | null }) {
   const ano = new Date().getFullYear();
 
   return (
-    <footer className="mt-16 bg-ink text-paper">
+    <footer className="mt-16 bg-topo text-paper">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 md:grid-cols-3">
         <div>
           <p className="font-display text-xl font-bold">Cueca do Avesso</p>
           {config?.textoInstitucional && (
-            <p className="mt-2 max-w-xs text-sm text-paper/70">
+            <p className="mt-2 max-w-xs text-sm text-paper/80">
               {config.textoInstitucional}
             </p>
           )}
@@ -49,12 +49,12 @@ export function Footer({ config }: { config: ConfiguracoesGerais | null }) {
           {config ? (
             <SocialIcons config={config} className="mt-3" />
           ) : (
-            <p className="mt-3 text-sm text-paper/60">Em breve.</p>
+            <p className="mt-3 text-sm text-paper/80">Em breve.</p>
           )}
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-2 border-t border-white/10 px-4 py-4 text-center text-xs text-paper/60 sm:flex-row sm:justify-between sm:px-6 sm:text-left">
+      <div className="flex flex-col items-center gap-2 border-t border-white/10 px-4 py-4 text-center text-xs text-paper/80 sm:flex-row sm:justify-between sm:px-6 sm:text-left">
         <p>© {ano} Cueca do Avesso. Feito com carinho pra rua.</p>
         <a
           href="/studio"

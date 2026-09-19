@@ -1,20 +1,32 @@
 @import "tailwindcss";
 
+/* Cores tiradas da logo do bloco. As de texto foram conferidas por contraste (WCAG AA). */
 :root {
+  /* Roxo do cabeçalho e do rodapé. */
+  --color-topo: #8b008b;
+  /* Escuro neutro: texto de títulos e véus sobre imagem. Não é o fundo do topo. */
   --color-ink: #1c1023;
   --color-paper: #fffaf3;
-  --color-paper-muted: #fdeee2;
-  --color-brand: #d6146b;
-  --color-brand-dark: #9c0e4d;
-  --color-accent: #ffc300;
-  --color-body-text: #3a2a3f;
-  --color-body-text-muted: #6b5a70;
+  --color-paper-muted: #fde8f4;
+  /* Magenta do anel da logo (#e30098), escurecido para ficar legível sobre fundo claro. */
+  --color-brand: #c4007f;
+  --color-brand-dark: #8e005c;
+  /* Dourado do anel da logo. */
+  --color-accent: #ffca00;
+  /* Verde-limão da palavra "Avesso" e azul do escudo: apoio, nunca texto em fundo claro. */
+  --color-limao: #9ec93e;
+  --color-azul: #034d9f;
+  --color-body-text: #2f2233;
+  --color-body-text-muted: #665a6b;
 }
 
 @theme inline {
+  --color-topo: var(--color-topo);
   --color-ink: var(--color-ink);
   --color-paper: var(--color-paper);
   --color-paper-muted: var(--color-paper-muted);
+  --color-limao: var(--color-limao);
+  --color-azul: var(--color-azul);
   --color-brand: var(--color-brand);
   --color-brand-dark: var(--color-brand-dark);
   --color-accent: var(--color-accent);

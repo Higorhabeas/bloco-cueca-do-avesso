@@ -25,7 +25,7 @@ export function Header({ config }: { config: ConfiguracoesGerais | null }) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-ink/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-topo/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link
           href="/"
