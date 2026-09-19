@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { FotoThumb } from "@/components/FotoThumb";
+import { FotoGaleria } from "@/components/FotoGaleria";
 import { ImagemEnquadrada } from "@/components/ImagemEnquadrada";
 import { PortableTextRenderer } from "@/components/PortableTextRenderer";
 import { VideoGaleria } from "@/components/VideoGaleria";
@@ -68,11 +68,10 @@ export default async function EventoPage({ params }: PageProps<"/eventos/[slug]"
           <h2 className="mb-4 font-display text-xl font-semibold text-ink">
             Fotos deste evento
           </h2>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {fotos.map((foto) => (
-              <FotoThumb key={foto._id} foto={foto} />
-            ))}
-          </div>
+          <FotoGaleria
+            fotos={fotos}
+            classeGrade="grid grid-cols-2 gap-3 sm:grid-cols-4"
+          />
         </section>
       )}
 

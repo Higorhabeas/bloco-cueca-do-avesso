@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { FotoThumb } from "@/components/FotoThumb";
+import { FotoGaleria } from "@/components/FotoGaleria";
 import { VideoGaleria } from "@/components/VideoGaleria";
 import { getEventos, getFotos, getVideos } from "@/sanity/queries";
 
@@ -63,11 +63,10 @@ export default async function GaleriaPage({
 
       <section className="mt-8">
         {fotos.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-            {fotos.map((foto) => (
-              <FotoThumb key={foto._id} foto={foto} />
-            ))}
-          </div>
+          <FotoGaleria
+            fotos={fotos}
+            classeGrade="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
+          />
         ) : (
           <p className="text-body-text-muted">Nenhuma foto por aqui ainda.</p>
         )}

@@ -30,11 +30,13 @@ export function ImagemEnquadrada({
 
   return (
     <>
+      {/* Mesma URL da imagem da frente, então o navegador baixa uma vez só. */}
       <Image
         src={url}
         alt=""
         aria-hidden="true"
         fill
+        priority={prioridade}
         sizes={sizes}
         className="scale-110 object-cover blur-2xl"
       />

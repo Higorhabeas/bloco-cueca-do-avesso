@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { EventoCard } from "@/components/EventoCard";
 import { EventoHeroCarousel } from "@/components/EventoHeroCarousel";
-import { FotoThumb } from "@/components/FotoThumb";
+import { FotoGaleria } from "@/components/FotoGaleria";
 import { MembroCard } from "@/components/MembroCard";
 import { RecadoCard } from "@/components/RecadoCard";
 import { separarEventos } from "@/lib/datas";
@@ -105,11 +105,10 @@ export default async function HomePage() {
               Ver galeria completa →
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {fotos.slice(0, 8).map((foto) => (
-              <FotoThumb key={foto._id} foto={foto} />
-            ))}
-          </div>
+          <FotoGaleria
+            fotos={fotos.slice(0, 8)}
+            classeGrade="grid grid-cols-2 gap-3 sm:grid-cols-4"
+          />
         </section>
       )}
 
