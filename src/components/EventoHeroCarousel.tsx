@@ -103,7 +103,7 @@ export function EventoHeroCarousel({ eventos }: { eventos: EventoSummary[] }) {
           return (
             <div
               key={evento._id}
-              className="relative aspect-video w-full shrink-0 snap-start overflow-hidden bg-ink sm:aspect-21/9"
+              className="relative aspect-video w-full shrink-0 snap-start overflow-hidden bg-ink sm:aspect-14/3"
             >
               {evento.imagemCapa?.asset ? (
                 <ImagemEnquadrada
@@ -117,19 +117,21 @@ export function EventoHeroCarousel({ eventos }: { eventos: EventoSummary[] }) {
                 <div className="h-full w-full bg-linear-to-br from-brand to-brand-dark" />
               )}
               <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/40 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 sm:px-6 sm:py-10">
-                <p className="w-fit rounded-full bg-accent px-3 py-1 text-xs font-bold uppercase tracking-wide text-ink">
+              <div className="absolute inset-x-0 bottom-0 mx-auto flex max-w-6xl flex-col gap-1.5 px-4 py-4 sm:px-6 sm:py-6">
+                <p className="w-fit rounded-full bg-accent px-3 py-0.5 text-xs font-bold uppercase tracking-wide text-ink">
                   {formatarDataEvento(evento.data)}
                 </p>
-                <h2 className="font-display text-2xl font-bold text-paper drop-shadow sm:text-4xl">
+                <h2 className="font-display text-xl font-bold text-paper drop-shadow sm:text-3xl">
                   {evento.titulo}
                 </h2>
                 {evento.local && (
-                  <p className="text-paper/90 sm:text-lg">{evento.local}</p>
+                  <p className="text-sm text-paper/90 sm:text-base">
+                    {evento.local}
+                  </p>
                 )}
                 <Link
                   href={`/eventos/${evento.slug}`}
-                  className="mt-2 w-fit rounded-full bg-brand px-5 py-2 text-sm font-semibold text-paper transition hover:bg-brand-dark"
+                  className="mt-1 w-fit rounded-full bg-brand px-4 py-1.5 text-sm font-semibold text-paper transition hover:bg-brand-dark"
                 >
                   Ver evento
                 </Link>
@@ -145,7 +147,9 @@ export function EventoHeroCarousel({ eventos }: { eventos: EventoSummary[] }) {
             type="button"
             onClick={() => irPara(indiceAtivo - 1, eventos.length)}
             aria-label="Evento anterior"
-            className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-ink/50 text-paper transition hover:bg-ink/70 sm:left-4"
+            /* Escondidas no celular: lá elas passariam por cima do título, e o
+               gesto de deslizar já resolve. Os pontinhos seguem disponíveis. */
+            className="absolute left-2 top-1/2 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-ink/50 text-paper transition hover:bg-ink/70 sm:left-4 sm:flex"
           >
             <span aria-hidden="true">‹</span>
           </button>
@@ -153,7 +157,7 @@ export function EventoHeroCarousel({ eventos }: { eventos: EventoSummary[] }) {
             type="button"
             onClick={() => irPara(indiceAtivo + 1, eventos.length)}
             aria-label="Próximo evento"
-            className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-ink/50 text-paper transition hover:bg-ink/70 sm:right-4"
+            className="absolute right-2 top-1/2 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-ink/50 text-paper transition hover:bg-ink/70 sm:right-4 sm:flex"
           >
             <span aria-hidden="true">›</span>
           </button>
