@@ -16,6 +16,8 @@ import {
 
 export const revalidate = 60;
 
+const EVENTOS_NO_CARROSSEL = 5;
+
 export default async function HomePage() {
   const [eventos, recados, fotos, membros, historia] = await Promise.all([
     getEventos(),
@@ -25,9 +27,15 @@ export default async function HomePage() {
     getHistoriaDoBloco(),
   ]);
 
+  // O que ainda vai acontecer lidera, do mais próximo para o mais distante; o
+  // resto do carrossel é completado com os eventos passados mais recentes.
+  // Assim o próximo evento sempre aparece primeiro, e cadastrar um evento novo
+  // empurra o mais antigo para fora sozinho.
   const { proximos, passados } = separarEventos(eventos);
-  const destaques = (proximos.length > 0 ? proximos : passados).slice(0, 5);
-  const outrosProximos = proximos.slice(destaques.length === proximos.length ? destaques.length : 0);
+  const destaques = [...proximos, ...passados].slice(0, EVENTOS_NO_CARROSSEL);
+
+  const noCarrossel = new Set(destaques.map((evento) => evento._id));
+  const outrosProximos = proximos.filter((evento) => !noCarrossel.has(evento._id));
 
   return (
     <div className="flex flex-col">
