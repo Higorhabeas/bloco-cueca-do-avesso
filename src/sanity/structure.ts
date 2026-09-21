@@ -11,6 +11,7 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("foto").title("Fotos"),
       S.documentTypeListItem("video").title("Vídeos"),
       S.documentTypeListItem("membroBateria").title("Bateria"),
+      S.documentTypeListItem("patrocinador").title("Patrocinadores"),
       S.divider(),
       S.listItem()
         .title("História do Bloco")
@@ -26,6 +27,13 @@ export const structure: StructureResolver = (S) =>
         ),
       ...S.documentTypeListItems().filter(
         (item) => !SINGLETON_TYPES.has(item.getId() ?? "") &&
-          !["evento", "recado", "foto", "video", "membroBateria"].includes(item.getId() ?? ""),
+          ![
+            "evento",
+            "recado",
+            "foto",
+            "video",
+            "membroBateria",
+            "patrocinador",
+          ].includes(item.getId() ?? ""),
       ),
     ]);

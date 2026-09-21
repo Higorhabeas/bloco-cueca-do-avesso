@@ -1,3 +1,5 @@
+import { ordenarPorNivel } from "@/lib/patrocinadores";
+
 import { client } from "./client";
 import type {
   ConfiguracoesGerais,
@@ -6,6 +8,7 @@ import type {
   Foto,
   HistoriaDoBloco,
   MembroBateria,
+  Patrocinador,
   Recado,
   RecadoSummary,
   Video,
@@ -99,6 +102,19 @@ export async function getVideos(eventoSlug?: string): Promise<Video[]> {
     }`,
     eventoSlug ? { eventoSlug } : {},
   );
+}
+
+export async function getPatrocinadores(): Promise<Patrocinador[]> {
+  const lista = await client.fetch<Patrocinador[]>(
+    `*[_type == "patrocinador"] | order(nome asc) {
+      _id,
+      nome,
+      logo,
+      site,
+      nivel
+    }`,
+  );
+  return ordenarPorNivel(lista);
 }
 
 export async function getMembrosBateria(): Promise<MembroBateria[]> {

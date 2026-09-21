@@ -51,6 +51,16 @@ export interface Video {
   evento?: { titulo: string; slug: string };
 }
 
+export type NivelPatrocinio = "master" | "ouro" | "prata" | "comum";
+
+export interface Patrocinador {
+  _id: string;
+  nome: string;
+  logo: SanityImage;
+  site?: string;
+  nivel: NivelPatrocinio;
+}
+
 export interface MembroBateria {
   _id: string;
   foto: SanityImage;

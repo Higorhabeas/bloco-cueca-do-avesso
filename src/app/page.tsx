@@ -1,16 +1,18 @@
 import Link from "next/link";
 
+import { CarrosselPrincipal } from "@/components/CarrosselPrincipal";
 import { EventoCard } from "@/components/EventoCard";
-import { EventoHeroCarousel } from "@/components/EventoHeroCarousel";
 import { FotoGaleria } from "@/components/FotoGaleria";
 import { MembroCard } from "@/components/MembroCard";
 import { RecadoCard } from "@/components/RecadoCard";
 import { separarEventos } from "@/lib/datas";
+import { montarSlidesDoCarrossel } from "@/lib/patrocinadores";
 import {
   getEventos,
   getFotos,
   getHistoriaDoBloco,
   getMembrosBateria,
+  getPatrocinadores,
   getRecados,
 } from "@/sanity/queries";
 
@@ -19,13 +21,15 @@ export const revalidate = 60;
 const EVENTOS_NO_CARROSSEL = 5;
 
 export default async function HomePage() {
-  const [eventos, recados, fotos, membros, historia] = await Promise.all([
-    getEventos(),
-    getRecados(3),
-    getFotos(),
-    getMembrosBateria(),
-    getHistoriaDoBloco(),
-  ]);
+  const [eventos, recados, fotos, membros, historia, patrocinadores] =
+    await Promise.all([
+      getEventos(),
+      getRecados(3),
+      getFotos(),
+      getMembrosBateria(),
+      getHistoriaDoBloco(),
+      getPatrocinadores(),
+    ]);
 
   // O que ainda vai acontecer lidera, do mais próximo para o mais distante; o
   // resto do carrossel é completado com os eventos passados mais recentes.
@@ -37,9 +41,14 @@ export default async function HomePage() {
   const noCarrossel = new Set(destaques.map((evento) => evento._id));
   const outrosProximos = proximos.filter((evento) => !noCarrossel.has(evento._id));
 
+  const slides = montarSlidesDoCarrossel(
+    destaques,
+    patrocinadores.filter((p) => p.nivel === "master"),
+  );
+
   return (
     <div className="flex flex-col">
-      <EventoHeroCarousel eventos={destaques} />
+      <CarrosselPrincipal slides={slides} />
 
       {destaques.length === 0 && (
         <div className="bg-linear-to-br from-brand to-brand-dark px-4 py-20 text-center text-paper sm:px-6">

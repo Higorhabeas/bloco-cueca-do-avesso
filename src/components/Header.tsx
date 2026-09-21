@@ -14,6 +14,7 @@ const NAV_LINKS = [
   { href: "/galeria", label: "Galeria" },
   { href: "/bateria", label: "Bateria" },
   { href: "/recados", label: "Recados" },
+  { href: "/parceiros", label: "Parceiros" },
 ];
 
 function ehLinkAtivo(pathname: string, href: string) {

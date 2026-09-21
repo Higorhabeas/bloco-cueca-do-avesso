@@ -1,7 +1,8 @@
 import Link from "next/link";
 
-import type { ConfiguracoesGerais } from "@/sanity/types";
+import type { ConfiguracoesGerais, Patrocinador } from "@/sanity/types";
 
+import { FaixaPatrocinadores } from "./FaixaPatrocinadores";
 import { SocialIcons } from "./SocialIcons";
 
 const FOOTER_LINKS = [
@@ -10,9 +11,16 @@ const FOOTER_LINKS = [
   { href: "/galeria", label: "Galeria" },
   { href: "/bateria", label: "Bateria" },
   { href: "/recados", label: "Recados" },
+  { href: "/parceiros", label: "Nossos parceiros" },
 ];
 
-export function Footer({ config }: { config: ConfiguracoesGerais | null }) {
+export function Footer({
+  config,
+  patrocinadores,
+}: {
+  config: ConfiguracoesGerais | null;
+  patrocinadores: Patrocinador[];
+}) {
   const ano = new Date().getFullYear();
 
   return (
@@ -53,6 +61,8 @@ export function Footer({ config }: { config: ConfiguracoesGerais | null }) {
           )}
         </div>
       </div>
+
+      <FaixaPatrocinadores lista={patrocinadores} />
 
       <div className="flex flex-col items-center gap-2 border-t border-white/10 px-4 py-4 text-center text-xs text-paper/80 sm:flex-row sm:justify-between sm:px-6 sm:text-left">
         <p>© {ano} Cueca do Avesso. Feito com carinho pra rua.</p>

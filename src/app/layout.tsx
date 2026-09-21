@@ -4,7 +4,7 @@ import { Fredoka, Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { WhatsAppFloatingButton } from "@/components/WhatsAppFloatingButton";
-import { getConfiguracoesGerais } from "@/sanity/queries";
+import { getConfiguracoesGerais, getPatrocinadores } from "@/sanity/queries";
 
 import "./globals.css";
 
@@ -34,7 +34,10 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const config = await getConfiguracoesGerais();
+  const [config, patrocinadores] = await Promise.all([
+    getConfiguracoesGerais(),
+    getPatrocinadores(),
+  ]);
 
   return (
     <html
@@ -52,7 +55,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <main id="conteudo-principal" tabIndex={-1} className="flex-1 focus:outline-none">
           {children}
         </main>
-        <Footer config={config} />
+        <Footer config={config} patrocinadores={patrocinadores} />
         <WhatsAppFloatingButton config={config} />
       </body>
     </html>
