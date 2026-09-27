@@ -2,6 +2,7 @@ import { isValidSignature } from "@sanity/webhook";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { emailsPermitidos } from "@/lib/painel/acesso";
+import { emailDeQuemAlterou } from "@/lib/painel/autorDaMudanca";
 import {
   type MudancaDeConteudo,
   type Operacao,
@@ -18,9 +19,12 @@ interface CorpoDoWebhook {
   tipo?: string;
   titulo?: string;
   slug?: string;
+  /** ID de quem alterou, vindo de `identity()` na projeção do webhook. */
+  autor?: string;
   // Campos do documento cru, caso o webhook seja criado sem projeção.
   _id?: string;
   _type?: string;
+  nome?: string;
 }
 
 function normalizar(corpo: CorpoDoWebhook): MudancaDeConteudo | null {
@@ -39,7 +43,7 @@ function normalizar(corpo: CorpoDoWebhook): MudancaDeConteudo | null {
   return {
     operacao,
     tipo,
-    titulo: corpo.titulo?.trim() || "(sem título)",
+    titulo: (corpo.titulo ?? corpo.nome)?.trim() || "(sem título)",
     slug: corpo.slug,
   };
 }
@@ -63,9 +67,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ mensagem: "Assinatura inválida." }, { status: 401 });
   }
 
+  let corpo: CorpoDoWebhook;
   let mudanca: MudancaDeConteudo | null;
   try {
-    mudanca = normalizar(JSON.parse(corpoCru) as CorpoDoWebhook);
+    corpo = JSON.parse(corpoCru) as CorpoDoWebhook;
+    mudanca = normalizar(corpo);
   } catch {
     return NextResponse.json({ mensagem: "Corpo inválido." }, { status: 400 });
   }
@@ -76,12 +82,18 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    // Quem fez a alteração não precisa ser avisado dela.
+    const autor = await emailDeQuemAlterou(corpo.autor);
+    const destinatarios = (await emailsPermitidos()).filter(
+      (email) => email !== autor,
+    );
+
     const resultado = await avisarAdministradores(
       mudanca,
       new URL(request.url).origin,
-      await emailsPermitidos(),
+      destinatarios,
     );
-    return NextResponse.json(resultado);
+    return NextResponse.json({ ...resultado, autorExcluido: Boolean(autor) });
   } catch (erro) {
     console.error("[webhook] falha ao avisar administradores", erro);
     return NextResponse.json(
