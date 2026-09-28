@@ -29,9 +29,31 @@ export default async function SobrePage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <h1 className="font-display text-3xl font-bold text-ink sm:text-4xl">
-        {historia.titulo}
-      </h1>
+      {historia.imagemTitulo?.asset ? (
+        // A imagem faz o papel do título na tela; o título escrito continua
+        // existindo para leitores de tela e para a estrutura da página.
+        <figure>
+          <h1 className="sr-only">{historia.titulo}</h1>
+          <div className="relative aspect-5/2 w-full overflow-hidden rounded-2xl bg-ink">
+            <ImagemEnquadrada
+              imagem={historia.imagemTitulo}
+              alt={historia.imagemTitulo.alt ?? historia.titulo}
+              sizes="(min-width: 768px) 768px, 100vw"
+              largura={1400}
+              prioridade
+            />
+          </div>
+          {historia.imagemTitulo.legenda && (
+            <figcaption className="mt-2 text-center text-sm text-body-text-muted">
+              {historia.imagemTitulo.legenda}
+            </figcaption>
+          )}
+        </figure>
+      ) : (
+        <h1 className="font-display text-3xl font-bold text-ink sm:text-4xl">
+          {historia.titulo}
+        </h1>
+      )}
 
       {historia.texto && (
         <div className="mt-6 max-w-prose">

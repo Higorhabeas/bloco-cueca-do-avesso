@@ -70,6 +70,7 @@ export interface MembroBateria {
 
 export interface HistoriaDoBloco {
   titulo: string;
+  imagemTitulo?: SanityImage & { legenda?: string };
   texto?: PortableTextBlock[];
   fotosAntigas?: (SanityImage & { ano?: string })[];
 }

@@ -13,6 +13,29 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "imagemTitulo",
+      title: "Imagem do título (opcional)",
+      description:
+        "Se preencher, esta imagem aparece na página no lugar do título escrito. O título acima continua valendo para a aba do navegador, para buscas e para quem usa leitor de tela.",
+      type: "image",
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Descrição da imagem",
+          description:
+            "O que está escrito ou representado na imagem. É lido por quem não enxerga. Em branco, usamos o título acima.",
+          type: "string",
+        }),
+        defineField({
+          name: "legenda",
+          title: "Legenda (opcional)",
+          description: "Texto curto exibido logo abaixo da imagem.",
+          type: "string",
+        }),
+      ],
+    }),
+    defineField({
       name: "texto",
       title: "Texto",
       type: "array",

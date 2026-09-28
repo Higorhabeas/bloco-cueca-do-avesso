@@ -130,7 +130,7 @@ export async function getMembrosBateria(): Promise<MembroBateria[]> {
 
 export async function getHistoriaDoBloco(): Promise<HistoriaDoBloco | null> {
   return client.fetch(
-    `*[_id == "historiaDoBloco"][0]{ titulo, texto, fotosAntigas }`,
+    `*[_id == "historiaDoBloco"][0]{ titulo, imagemTitulo, texto, fotosAntigas }`,
   );
 }
 
