@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { emailsPermitidos } from "@/lib/painel/acesso";
 import { emailDeQuemAlterou } from "@/lib/painel/autorDaMudanca";
+import { convidarNovosAdministradores } from "@/lib/painel/convites";
 import {
   type MudancaDeConteudo,
   type Operacao,
@@ -81,6 +82,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ignorado: true });
   }
 
+  // Mexer na lista de administradores convida quem ainda não é membro do
+  // projeto, para que tudo seja gerenciado pelo Studio.
+  let convidados: string[] = [];
+  if (mudanca.tipo === "configuracoesGerais") {
+    try {
+      convidados = (await convidarNovosAdministradores()).convidados;
+    } catch (erro) {
+      console.error("[webhook] falha ao convidar administradores", erro);
+    }
+  }
+
   try {
     // Quem fez a alteração não precisa ser avisado dela.
     const autor = await emailDeQuemAlterou(corpo.autor);
@@ -93,7 +105,11 @@ export async function POST(request: NextRequest) {
       new URL(request.url).origin,
       destinatarios,
     );
-    return NextResponse.json({ ...resultado, autorExcluido: Boolean(autor) });
+    return NextResponse.json({
+      ...resultado,
+      autorExcluido: Boolean(autor),
+      ...(convidados.length > 0 ? { convidados } : {}),
+    });
   } catch (erro) {
     console.error("[webhook] falha ao avisar administradores", erro);
     return NextResponse.json(
