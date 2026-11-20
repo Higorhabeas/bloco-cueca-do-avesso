@@ -53,7 +53,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`${geistSans.variable} ${geistMono.variable} ${fredoka.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-paper text-body-text">
+      {/* A cor de fundo mora no <html> para a marca d'água do arco, em
+          globals.css, poder ficar entre ela e o conteúdo. */}
+      <body className="flex min-h-full flex-col text-body-text">
         <a
           href="#conteudo-principal"
           className="sr-only-focusable fixed left-4 top-4 z-50 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-paper"

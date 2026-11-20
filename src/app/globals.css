@@ -37,9 +37,62 @@
   --font-display: var(--font-fredoka);
 }
 
+/* A cor fica no <html>: sem isso o fundo do <body> é promovido para a tela
+   inteira e cobriria a marca d'água, que precisa ficar por cima dele. */
+html {
+  background-color: var(--color-paper);
+}
+
 body {
-  background: var(--color-paper);
+  background: transparent;
   color: var(--color-body-text);
+}
+
+/* Marca d'água: o arco da Colônia Santa Isabel atrás do conteúdo. Bem apagada
+   de propósito — é pano de fundo, e o texto por cima precisa continuar com o
+   mesmo contraste de antes. `fixed` deixa a foto parada enquanto a página rola. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("/arco-santa-isabel.jpg");
+  background-repeat: no-repeat;
+  background-size: auto 92%;
+  background-position: center center;
+  /* 0.14 é o teto medido: acima disso o texto apagado (--color-body-text-muted)
+     cai abaixo de 4.5:1 sobre o ponto mais escuro da foto. Em 0.18 dava 4.39:1. */
+  opacity: 0.14;
+  /* A máscara apaga as bordas da foto. Sem ela o retângulo dela aparece, porque
+     o céu cinza não é a mesma cor do creme do fundo. */
+  -webkit-mask-image: radial-gradient(
+    ellipse 58% 40% at 50% 50%,
+    #000 30%,
+    transparent 92%
+  );
+  mask-image: radial-gradient(
+    ellipse 58% 40% at 50% 50%,
+    #000 30%,
+    transparent 92%
+  );
+}
+
+/* Em tela larga a foto ocupa uma faixa estreita no meio, então o recorte da
+   máscara precisa acompanhar. */
+@media (min-width: 768px) {
+  body::before {
+    -webkit-mask-image: radial-gradient(
+      ellipse 20% 46% at 50% 50%,
+      #000 30%,
+      transparent 92%
+    );
+    mask-image: radial-gradient(
+      ellipse 20% 46% at 50% 50%,
+      #000 30%,
+      transparent 92%
+    );
+  }
 }
 
 ::selection {
