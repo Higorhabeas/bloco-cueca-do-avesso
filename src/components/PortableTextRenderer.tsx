@@ -42,6 +42,8 @@ const components: PortableTextComponents = {
         className="text-brand underline underline-offset-2"
       >
         {children}
+        {/* Abrir uma aba nova sem avisar desorienta quem não vê a tela. */}
+        <span className="sr-only"> (abre em uma nova aba)</span>
       </a>
     ),
   },

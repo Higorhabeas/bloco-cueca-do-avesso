@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fredoka, Geist, Geist_Mono } from "next/font/google";
 
 import { Footer } from "@/components/Footer";
@@ -31,6 +31,15 @@ export const metadata: Metadata = {
   },
   description:
     "Bloco de carnaval de rua Cueca do Avesso: eventos, fotos, recados e tudo sobre o nosso carnaval.",
+};
+
+export const viewport: Viewport = {
+  // Mesmo roxo do cabeçalho: no celular a barra do navegador deixa de destoar
+  // e a página parece começar no topo da tela.
+  themeColor: "#8b008b",
+  // O site só tem tema claro. Sem dizer isso, o navegador em modo escuro
+  // inverte campos de formulário e barras de rolagem por conta própria.
+  colorScheme: "light",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

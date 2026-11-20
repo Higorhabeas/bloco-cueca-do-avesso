@@ -56,8 +56,10 @@ export function LogoPatrocinador({
         {miolo}
       </span>
 
+      {/* Puramente visual: quem usa leitor de tela já ouve o mesmo recado no
+          aria-label do link, e anunciar de novo aqui seria repetição. */}
       <span
-        role="tooltip"
+        aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-max max-w-[14rem] -translate-x-1/2 rounded-lg bg-ink px-3 py-2 text-center text-xs font-medium text-paper opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-visible:opacity-100"
       >
         Clique para visitar o site de {nome}

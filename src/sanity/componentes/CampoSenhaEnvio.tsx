@@ -94,7 +94,7 @@ export function CampoSenhaEnvio(props: StringInputProps) {
 
       <Flex gap={2}>
         <Button
-          text={salvando ? "Guardando..." : "Guardar senha"}
+          text={salvando ? "Guardando…" : "Guardar senha"}
           tone="primary"
           disabled={salvando || senha.trim().length === 0 || readOnly}
           onClick={salvar}

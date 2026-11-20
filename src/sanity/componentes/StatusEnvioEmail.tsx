@@ -46,7 +46,7 @@ export function StatusEnvioEmail() {
         <Flex align="center" gap={3}>
           <Spinner muted />
           <Text size={1} muted>
-            Conferindo...
+            Conferindo…
           </Text>
         </Flex>
       </Card>

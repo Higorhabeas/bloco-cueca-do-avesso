@@ -72,6 +72,28 @@ h3 {
   text-wrap: balance;
 }
 
+/* O cabeçalho fica grudado no topo. Sem esta folga, pular para um trecho da
+   página faz o alvo parar atrás dele. */
+:target,
+h1,
+h2,
+h3 {
+  scroll-margin-top: 6rem;
+}
+
+/* Tira o atraso de ~300ms que alguns navegadores de celular esperam para ver
+   se o toque vira um toque duplo. O pinçar para ampliar continua funcionando. */
+a,
+button,
+label,
+select,
+summary,
+input,
+textarea,
+[role="button"] {
+  touch-action: manipulation;
+}
+
 p {
   text-wrap: pretty;
 }

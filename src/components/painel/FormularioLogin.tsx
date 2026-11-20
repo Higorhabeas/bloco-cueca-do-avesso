@@ -116,7 +116,7 @@ export function FormularioLogin({ voltar }: { voltar: string }) {
             disabled={enviando}
             className="rounded-full bg-brand px-5 py-2.5 font-semibold text-paper transition hover:bg-brand-dark disabled:opacity-60"
           >
-            {enviando ? "Enviando..." : "Receber código"}
+            {enviando ? "Enviando…" : "Receber código"}
           </button>
         </form>
       ) : (
@@ -149,7 +149,7 @@ export function FormularioLogin({ voltar }: { voltar: string }) {
             disabled={enviando || codigo.length < 6}
             className="rounded-full bg-brand px-5 py-2.5 font-semibold text-paper transition hover:bg-brand-dark disabled:opacity-60"
           >
-            {enviando ? "Conferindo..." : "Entrar no painel"}
+            {enviando ? "Conferindo…" : "Entrar no painel"}
           </button>
 
           <button

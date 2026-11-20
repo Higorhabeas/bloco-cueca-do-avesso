@@ -113,7 +113,7 @@ export const revisarPortuguesAction: DocumentActionComponent = (props) => {
             <Flex align="center" gap={3}>
               <Spinner muted />
               <Text size={1} muted>
-                Lendo o texto...
+                Lendo o texto…
               </Text>
             </Flex>
           )}
