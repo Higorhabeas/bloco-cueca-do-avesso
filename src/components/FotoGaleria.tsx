@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { urlFor } from "@/sanity/image";
 import type { Foto } from "@/sanity/types";
 
 import { ImagemEnquadrada } from "./ImagemEnquadrada";
+import { useModalAcessivel } from "./useModalAcessivel";
 
 function legendaDa(foto: Foto): string {
   return foto.imagem?.alt ?? foto.legenda ?? "Foto do bloco";
@@ -23,44 +24,41 @@ function Ampliada({
   aoFechar: () => void;
   aoNavegar: (novoIndice: number) => void;
 }) {
-  const botaoFecharRef = useRef<HTMLButtonElement>(null);
   const foto = fotos[indice];
   const total = fotos.length;
+  const dialogoRef = useModalAcessivel(aoFechar);
 
   const irPara = useCallback(
     (destino: number) => aoNavegar((destino + total) % total),
     [aoNavegar, total],
   );
 
+  // Rolagem de fotos pelas setas do teclado. O resto do comportamento do modal
+  // — Esc, foco, trava de rolagem — fica no hook.
   useEffect(() => {
-    botaoFecharRef.current?.focus();
-    const overflowOriginal = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
     const aoTeclar = (evento: KeyboardEvent) => {
-      if (evento.key === "Escape") aoFechar();
       if (evento.key === "ArrowRight") irPara(indice + 1);
       if (evento.key === "ArrowLeft") irPara(indice - 1);
     };
     document.addEventListener("keydown", aoTeclar);
-
-    return () => {
-      document.body.style.overflow = overflowOriginal;
-      document.removeEventListener("keydown", aoTeclar);
-    };
-  }, [aoFechar, irPara, indice]);
+    return () => document.removeEventListener("keydown", aoTeclar);
+  }, [irPara, indice]);
 
   const url = urlFor(foto.imagem).width(1800).fit("max").url();
 
   return (
+    // O diálogo é a tela inteira, e não só a coluna do meio: as setas de
+    // navegação ficam nas bordas, e com `aria-modal` tudo que estivesse fora
+    // do diálogo sumiria para quem usa leitor de tela.
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-ink/90 p-4"
+      ref={dialogoRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Foto ampliada: ${legendaDa(foto)}`}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center overscroll-contain bg-ink/90 p-4"
       onClick={aoFechar}
     >
       <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={`Foto ampliada: ${legendaDa(foto)}`}
         onClick={(evento) => evento.stopPropagation()}
         className="flex w-full max-w-5xl flex-col items-center gap-3"
       >
@@ -69,7 +67,6 @@ function Ampliada({
             {indice + 1} de {total}
           </p>
           <button
-            ref={botaoFecharRef}
             type="button"
             onClick={aoFechar}
             aria-label="Fechar foto"

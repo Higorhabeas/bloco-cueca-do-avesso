@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import type { Video } from "@/sanity/types";
 
 import { ImagemEnquadrada } from "./ImagemEnquadrada";
+import { useModalAcessivel } from "./useModalAcessivel";
 
 function extrairIdYoutube(url: string): string | null {
   const match = url.match(
@@ -14,31 +15,16 @@ function extrairIdYoutube(url: string): string | null {
 }
 
 function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const youtubeId = extrairIdYoutube(video.url);
-
-  useEffect(() => {
-    closeButtonRef.current?.focus();
-    const overflowOriginal = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      document.body.style.overflow = overflowOriginal;
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [onClose]);
+  const dialogoRef = useModalAcessivel(onClose);
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center overscroll-contain bg-ink/80 p-4"
       onClick={onClose}
     >
       <div
+        ref={dialogoRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="video-modal-titulo"
@@ -53,7 +39,6 @@ function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
             {video.titulo}
           </h2>
           <button
-            ref={closeButtonRef}
             type="button"
             onClick={onClose}
             aria-label="Fechar vídeo"
@@ -68,7 +53,7 @@ function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
             <iframe
               src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
               title={video.titulo}
-              allow="accelerate; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="h-full w-full"
             />

@@ -16,6 +16,7 @@ export function FaixaPatrocinadores({ lista }: { lista: Patrocinador[] }) {
   const [cabemNaLinha, setCabemNaLinha] = useState(1);
   const [inicio, setInicio] = useState(0);
   const [pausado, setPausado] = useState(false);
+  const [pausadoManual, setPausadoManual] = useState(false);
 
   // Quantas logos cabem depende da largura da tela, então é medido e re-medido.
   useEffect(() => {
@@ -36,7 +37,9 @@ export function FaixaPatrocinadores({ lista }: { lista: Patrocinador[] }) {
     return () => observador.disconnect();
   }, []);
 
-  const rodando = lista.length > cabemNaLinha && !pausado;
+  // Só há fila andando quando não cabe todo mundo na linha de uma vez.
+  const temFila = lista.length > cabemNaLinha;
+  const rodando = temFila && !pausado && !pausadoManual;
 
   useEffect(() => {
     if (!rodando) return;
@@ -72,9 +75,30 @@ export function FaixaPatrocinadores({ lista }: { lista: Patrocinador[] }) {
         }
       }}
     >
-      <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wide text-accent">
-        Nossos parceiros
-      </p>
+      <div className="mb-3 flex items-center justify-center gap-2">
+        <p className="text-xs font-semibold uppercase tracking-wide text-accent">
+          Nossos parceiros
+        </p>
+        {/* Parar a fila não pode depender de mouse ou de teclado: quem navega
+            de outro jeito também precisa de um jeito de segurar o movimento. */}
+        {temFila && (
+          <button
+            type="button"
+            onClick={() => setPausadoManual((atual) => !atual)}
+            aria-label={
+              pausadoManual
+                ? "Retomar a troca dos parceiros"
+                : "Pausar a troca dos parceiros"
+            }
+            aria-pressed={pausadoManual}
+            className="flex h-5 w-5 items-center justify-center rounded-full bg-paper/15 text-paper transition hover:bg-paper/30"
+          >
+            <span aria-hidden="true" className="text-[9px] leading-none">
+              {pausadoManual ? "▶" : "⏸"}
+            </span>
+          </button>
+        )}
+      </div>
 
       <div
         ref={areaRef}

@@ -48,6 +48,13 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col">
+      {/* Com eventos cadastrados a página abre no carrossel, que só tem h2.
+          O título principal continua existindo para leitores de tela e para a
+          busca; quando não há evento nenhum, ele aparece na tela logo abaixo. */}
+      {destaques.length > 0 && (
+        <h1 className="sr-only">Cueca do Avesso — bloco de carnaval de rua</h1>
+      )}
+
       <CarrosselPrincipal slides={slides} />
 
       {destaques.length === 0 && (
